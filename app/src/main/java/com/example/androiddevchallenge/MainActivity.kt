@@ -24,9 +24,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Comment
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,12 +69,12 @@ fun MyApp() {
                 items(animalModelList) { item ->
                     Column {
                         FeedCard(url = item.imageUrl)
-                        Spacer(modifier = Modifier.height(6.dp))
-                        Row {
+                        Spacer(modifier = Modifier.height(4.dp))
 
-                        }
+                        FeedActions()
+
+                        Spacer(modifier = Modifier.height(24.dp))
                     }
-
                 }
             })
         }
@@ -117,7 +119,7 @@ fun TabBarItem(text: String, isSelected: Boolean, onClick: (() -> Unit)? = null)
                 .typography
                 .subtitle1
                 .copy(color = if (isSelected) {
-                    MaterialTheme.colors.surface
+                        MaterialTheme.colors.surface
                     } else {
                         MaterialTheme.colors.onBackground
                     }
@@ -125,7 +127,6 @@ fun TabBarItem(text: String, isSelected: Boolean, onClick: (() -> Unit)? = null)
         )
     }
 }
-
 
 @Composable
 fun FeedCard(url: String) {
@@ -138,11 +139,31 @@ fun FeedCard(url: String) {
             contentDescription = "",
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 180.dp)
-                .padding(vertical = 16.dp),
+                .heightIn(min = 180.dp),
             contentScale = ContentScale.FillWidth,
             fadeIn = true
         )
+    }
+}
+
+@Composable
+fun FeedActions() {
+    Row {
+        IconButton(onClick = { /* doSomething() */ }) {
+            Icon(Icons.Filled.Favorite, contentDescription = "Favorite")
+        }
+        Spacer(modifier = Modifier.width(4.dp))
+
+        IconButton(onClick = { /* doSomething() */ }) {
+            Icon(Icons.Filled.Comment, contentDescription = "Comment")
+        }
+        Spacer(modifier = Modifier.width(4.dp))
+
+        IconButton(onClick = { /* doSomething() */ }) {
+            Icon(Icons.Filled.Share, contentDescription = "Share")
+        }
+        Spacer(modifier = Modifier.width(4.dp))
+
     }
 }
 

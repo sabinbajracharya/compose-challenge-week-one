@@ -19,8 +19,10 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -73,7 +75,9 @@ fun MyApp(userViewModel: UserViewModel) {
             LazyColumn(content = {
                 items(animalModelList) { item ->
                     Column {
-                        FeedCard(url = item.imageUrl)
+                        FeedCard(url = item.imageUrl) {
+                            userViewModel.addOrRemoveFav(item.id)
+                        }
                         Spacer(modifier = Modifier.height(4.dp))
 
                         FeedActions(item.id, userViewModel)
@@ -133,11 +137,13 @@ fun TabBarItem(text: String, isSelected: Boolean, onClick: (() -> Unit)? = null)
     }
 }
 
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FeedCard(url: String) {
+fun FeedCard(url: String, onDoubleClick: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(size = 6.dp),
-
+        modifier = Modifier.combinedClickable(onDoubleClick = onDoubleClick) {}
     ) {
         CoilImage(
             data = url,

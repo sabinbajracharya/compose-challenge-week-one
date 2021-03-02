@@ -18,12 +18,11 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -33,9 +32,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.transform.CircleCropTransformation
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import dev.chrisbanes.accompanist.coil.CoilImage
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +56,15 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
             TabBar(
                 listOf("All", "Following")
             )
+            LazyColumn(content = {
+                items(animalModelList) { item ->
+                    FeedCard(url = item.imageUrl)
+                }
+            })
         }
     }
 }
@@ -108,18 +116,46 @@ fun TabBarItem(text: String, isSelected: Boolean, onClick: (() -> Unit)? = null)
     }
 }
 
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
+
 @Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
+fun FeedCard(url: String) {
+    Surface(
+        shape = RoundedCornerShape(size = 6.dp),
+
+    ) {
+        CoilImage(
+            data = url,
+            contentDescription = "",
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 180.dp)
+                .padding(vertical = 16.dp),
+            contentScale = ContentScale.FillWidth,
+            fadeIn = true
+        )
     }
 }
 
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
-    }
-}
+//@Preview("Light Theme", widthDp = 360, heightDp = 640)
+//@Composable
+//fun LightPreview() {
+//    MyTheme {
+//        MyApp()
+//    }
+//}
+
+//@Preview("Dark Theme", widthDp = 360, heightDp = 640)
+//@Composable
+//fun DarkPreview() {
+//    MyTheme(darkTheme = true) {
+//        MyApp()
+//    }
+//}
+
+//@Preview("Feed Card", widthDp = 360, heightDp = 640)
+//@Composable
+//fun FeedCardPreview() {
+//    MyTheme(darkTheme = true) {
+//        FeedCard(animalModelList[0].imageUrl)
+//    }
+//}

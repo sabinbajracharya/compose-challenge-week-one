@@ -115,7 +115,7 @@ fun Detail(userViewModel: UserViewModel) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Detail",
+                        text = "Pet Bio",
                         style = MaterialTheme.typography.subtitle2,
                         color = LocalContentColor.current
                     )
@@ -127,7 +127,8 @@ fun Detail(userViewModel: UserViewModel) {
                             contentDescription = stringResource(R.string.navigate_back)
                         )
                     }
-                }
+                },
+                backgroundColor = MaterialTheme.colors.onPrimary
             )
         }
     ) { innerPadding ->

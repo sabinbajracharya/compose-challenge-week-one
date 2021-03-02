@@ -56,13 +56,23 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
-        Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
+        Column(modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()) {
             TabBar(
-                listOf("All", "Following")
+                listOf("Feed", "Discover")
             )
+            Spacer(modifier = Modifier.height(16.dp))
             LazyColumn(content = {
                 items(animalModelList) { item ->
-                    FeedCard(url = item.imageUrl)
+                    Column {
+                        FeedCard(url = item.imageUrl)
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Row {
+
+                        }
+                    }
+
                 }
             })
         }
@@ -101,16 +111,16 @@ fun TabBarItem(text: String, isSelected: Boolean, onClick: (() -> Unit)? = null)
         } ?: run { Modifier }
     ) {
         Text(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(12.dp),
             text = text,
             style = MaterialTheme
                 .typography
                 .subtitle1
                 .copy(color = if (isSelected) {
                     MaterialTheme.colors.surface
-                } else {
-                    MaterialTheme.colors.onBackground
-                }
+                    } else {
+                        MaterialTheme.colors.onBackground
+                    }
                 )
         )
     }

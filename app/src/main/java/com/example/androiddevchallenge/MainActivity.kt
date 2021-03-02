@@ -34,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -148,9 +149,18 @@ fun FeedCard(url: String) {
 
 @Composable
 fun FeedActions() {
+    val didLike = remember { mutableStateOf(false) }
     Row {
-        IconButton(onClick = { /* doSomething() */ }) {
-            Icon(Icons.Filled.Favorite, contentDescription = "Favorite")
+        IconButton(onClick = { didLike.value = !didLike.value }) {
+            Icon(
+                Icons.Filled.Favorite,
+                contentDescription = "Favorite",
+                tint = if (didLike.value) {
+                    Color.Red
+                } else {
+                    LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                }
+            )
         }
         Spacer(modifier = Modifier.width(4.dp))
 

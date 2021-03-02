@@ -7,7 +7,7 @@
 
 ## :scroll: Description
 <!--- Describe your app in one or two sentences -->
-My App is a Dog/Cat catlog app. You could if you want to scroll through the feed endlessly to see cute dogs and cats. The goal of the app is to build a puppy adobption app but good luck with that as the information is just dummy content. But at least you will have a smile on your face while looking at the pictures.
+My App is a Dog/Cat adoption app. You could if you want to scroll through the feed endlessly to see cute dogs and cats. The goal of the app is to build a puppy adoption app but good luck with that as the information is just dummy content. But at least you will have a smile on your face while looking at the pictures.
 
 
 ## :bulb: Motivation and Context

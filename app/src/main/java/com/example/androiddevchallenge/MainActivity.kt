@@ -29,10 +29,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -40,10 +42,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.transform.CircleCropTransformation
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import com.example.androiddevchallenge.ui.theme.Screen
 import com.example.androiddevchallenge.ui.theme.UserViewModel
 import dev.chrisbanes.accompanist.coil.CoilImage
 
@@ -60,32 +65,112 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-
 // Start building your app here!
 @Composable
 fun MyApp(userViewModel: UserViewModel) {
     Surface(color = MaterialTheme.colors.background) {
-        Column(modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()) {
-            TabBar(
-                listOf("Feed", "Discover")
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn(content = {
-                items(animalModelList) { item ->
-                    Column {
-                        FeedCard(url = item.imageUrl) {
+        when(userViewModel.currentScreen()) {
+            Screen.HOME -> Home(userViewModel)
+            Screen.DETAIL -> Detail(userViewModel)
+        }
+    }
+}
+
+@Composable
+fun Home(userViewModel: UserViewModel) {
+    Column(modifier = Modifier
+        .padding(16.dp)
+        .fillMaxWidth()) {
+        TabBar(
+            listOf("Feed", "Discover")
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        LazyColumn(content = {
+            items(animalModelList) { item ->
+                Column {
+                    FeedCard(
+                        url = item.imageUrl,
+                        onDoubleClick = {
                             userViewModel.addOrRemoveFav(item.id)
+                        },
+                        onClick = {
+                            userViewModel.changeScreen(Screen.DETAIL, item.id)
                         }
-                        Spacer(modifier = Modifier.height(4.dp))
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
 
-                        FeedActions(item.id, userViewModel)
+                    FeedActions(item.id, userViewModel)
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
+            }
+        })
+    }
+}
+
+@Composable
+fun Detail(userViewModel: UserViewModel) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Detail",
+                        style = MaterialTheme.typography.subtitle2,
+                        color = LocalContentColor.current
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { userViewModel.changeScreen(Screen.HOME) }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.navigate_back)
+                        )
                     }
                 }
-            })
+            )
+        }
+    ) { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
+
+        DetailContent(userViewModel, modifier)
+    }
+}
+
+@Composable
+fun DetailContent(userViewModel: UserViewModel, modifier: Modifier = Modifier) {
+    val (_, imageUrl, name, description) = userViewModel.getMyFuturePet(userViewModel.selectedId)
+
+    LazyColumn(modifier) {
+        item {
+            CoilImage(
+                data = imageUrl,
+                contentDescription = "",
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentScale = ContentScale.FillWidth,
+                fadeIn = true
+            )
+        }
+        item {
+            Spacer(Modifier.height(8.dp))
+        }
+        item {
+            Text(text = name, style = MaterialTheme.typography.h4, modifier = Modifier.padding(horizontal = 8.dp))
+        }
+        item {
+            Spacer(Modifier.height(8.dp))
+        }
+        item {
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.body2,
+                    lineHeight = 20.sp,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
@@ -140,10 +225,10 @@ fun TabBarItem(text: String, isSelected: Boolean, onClick: (() -> Unit)? = null)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FeedCard(url: String, onDoubleClick: () -> Unit) {
+fun FeedCard(url: String, onDoubleClick: () -> Unit, onClick: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(size = 6.dp),
-        modifier = Modifier.combinedClickable(onDoubleClick = onDoubleClick) {}
+        modifier = Modifier.combinedClickable(onDoubleClick = onDoubleClick, onClick = onClick)
     ) {
         CoilImage(
             data = url,

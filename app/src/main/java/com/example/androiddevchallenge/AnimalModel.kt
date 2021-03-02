@@ -2,11 +2,15 @@ package com.example.androiddevchallenge
 
 data class AnimalModel(
     val id: Int,
-    val imageUrl: String
+    val imageUrl: String,
+    val name: String = "Your Future Pet!",
+    val description: String = "Hurry!! Make this your pet before it's too late. Call us right now!"
 )
 
 var animalModelList = listOf(
-    AnimalModel(1,"https://expertphotography.com/wp-content/uploads/2018/04/pug-outfit.jpg")
+    AnimalModel(
+        1,"https://expertphotography.com/wp-content/uploads/2018/04/pug-outfit.jpg",
+    )
 ,   AnimalModel(2, "https://i.pinimg.com/originals/9d/54/34/9d54345f6e8d7bdf67035e085c272418.jpg")
 ,   AnimalModel(3,"https://lh3.googleusercontent.com/proxy/xHiRSiRxU2UcuySUmi94HglW2fl4SkOO1eDWIb3TVaqgbHoCi9ZNQMxZzf0gRAi5S40mVwG5qNVkot8bmlhWf-QqMFzhZkEXPcP29PugLNSGEMr6O0l7e9K5hO2zS-S6VM5ymlyzhFnPJBLLDUSdJ1MDsv4PTPUva0UzZTd5wNZtNL1ucSK3mRY33fwfnIL4qv0TDTWy2YkHBqkggdm1")
 ,   AnimalModel(4,"https://swiftype-ss.imgix.net/https%3A%2F%2Fcdn.petcarerx.com%2Fblog%2Fwp-content-uploads-2014-03-sophie-bulldog-blog-thumb.jpg?ixlib=rb-1.1.0&h=320&fit=clip&dpr=2.0&s=04f32e55878ae1fffc0b0243ef37ab67")

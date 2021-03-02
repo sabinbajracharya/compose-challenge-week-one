@@ -18,11 +18,23 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.ui.theme.MyTheme
 
 class MainActivity : AppCompatActivity() {
@@ -36,11 +48,63 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+
 // Start building your app here!
 @Composable
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+        Column(modifier = Modifier.padding(16.dp)) {
+            TabBar(
+                listOf("All", "Following")
+            )
+        }
+    }
+}
+
+@Composable
+fun TabBar(menus: List<String>) {
+    val selectedPosition = remember { mutableStateOf(0) }
+    Row {
+        for ((index, menu) in menus.withIndex()) {
+            TabBarItem(
+                menu,
+                index == selectedPosition.value,
+            ) {
+                selectedPosition.value = index
+            }
+            Spacer(modifier = Modifier.padding(end = 8.dp))
+        }
+    }
+}
+
+@Composable
+fun TabBarItem(text: String, isSelected: Boolean, onClick: (() -> Unit)? = null) {
+    Surface(
+        shape = RoundedCornerShape(percent = 40),
+        color = if (isSelected) {
+            MaterialTheme.colors.onBackground
+        } else {
+            MaterialTheme.colors.surface
+        },
+        modifier = onClick?.let {
+            Modifier
+                .clip(RoundedCornerShape(percent = 40))
+                .clickable(onClick = it)
+        } ?: run { Modifier }
+    ) {
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = text,
+            style = MaterialTheme
+                .typography
+                .subtitle1
+                .copy(color = if (isSelected) {
+                    MaterialTheme.colors.surface
+                } else {
+                    MaterialTheme.colors.onBackground
+                }
+                )
+        )
     }
 }
 

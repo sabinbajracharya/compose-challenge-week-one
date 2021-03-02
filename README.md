@@ -7,11 +7,13 @@
 
 ## :scroll: Description
 <!--- Describe your app in one or two sentences -->
+My App is a Dog/Cat catlog app. You could if you want to scroll through the feed endlessly to see cute dogs and cats. The goal of the app is to build a puppy adobption app but good luck with that as the information is just dummy content. But at least you will have a smile on your face while looking at the pictures.
 
 
 ## :bulb: Motivation and Context
 <!--- Optionally point readers to interesting parts of your submission. -->
 <!--- What are you especially proud of? -->
+Working with Android Compose was such a relief. It was very easy to style the components as well as not having to focus on XML did speed up the development process. The only problem I had right now is that the Compose Preview is very slow and The Android Studio Canary crashed so much (also out of memory issue) that I had to use compose without the preview feature.
 
 
 ## :camera_flash: Screenshots

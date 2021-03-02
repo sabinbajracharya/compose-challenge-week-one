@@ -17,6 +17,7 @@ package com.example.androiddevchallenge
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -41,14 +42,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.transform.CircleCropTransformation
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import com.example.androiddevchallenge.ui.theme.UserViewModel
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 class MainActivity : AppCompatActivity() {
+    private val userViewModel: UserViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyTheme {
-                MyApp()
+                MyApp(userViewModel)
             }
         }
     }
@@ -57,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
 // Start building your app here!
 @Composable
-fun MyApp() {
+fun MyApp(userViewModel: UserViewModel) {
     Surface(color = MaterialTheme.colors.background) {
         Column(modifier = Modifier
             .padding(16.dp)
@@ -72,7 +76,7 @@ fun MyApp() {
                         FeedCard(url = item.imageUrl)
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        FeedActions()
+                        FeedActions(item.id, userViewModel)
 
                         Spacer(modifier = Modifier.height(24.dp))
                     }
@@ -148,14 +152,14 @@ fun FeedCard(url: String) {
 }
 
 @Composable
-fun FeedActions() {
-    val didLike = remember { mutableStateOf(false) }
+fun FeedActions(id: Int, userViewModel: UserViewModel) {
+//    val didLike = remember { mutableStateOf(false) }
     Row {
-        IconButton(onClick = { didLike.value = !didLike.value }) {
+        IconButton(onClick = { userViewModel.addOrRemoveFav(id) }) {
             Icon(
                 Icons.Filled.Favorite,
                 contentDescription = "Favorite",
-                tint = if (didLike.value) {
+                tint = if (userViewModel.didFav(id)) {
                     Color.Red
                 } else {
                     LocalContentColor.current.copy(alpha = LocalContentAlpha.current)

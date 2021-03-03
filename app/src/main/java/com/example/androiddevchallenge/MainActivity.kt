@@ -20,14 +20,29 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Comment
@@ -41,12 +56,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.transform.CircleCropTransformation
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import com.example.androiddevchallenge.ui.theme.Screen
 import com.example.androiddevchallenge.ui.theme.UserViewModel
@@ -69,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp(userViewModel: UserViewModel) {
     Surface(color = MaterialTheme.colors.background) {
-        when(userViewModel.currentScreen()) {
+        when (userViewModel.currentScreen()) {
             Screen.HOME -> Home(userViewModel)
             Screen.DETAIL -> Detail(userViewModel)
         }
@@ -78,33 +90,37 @@ fun MyApp(userViewModel: UserViewModel) {
 
 @Composable
 fun Home(userViewModel: UserViewModel) {
-    Column(modifier = Modifier
-        .padding(16.dp)
-        .fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
         TabBar(
             listOf("Feed", "Discover")
         )
         Spacer(modifier = Modifier.height(16.dp))
-        LazyColumn(content = {
-            items(animalModelList) { item ->
-                Column {
-                    FeedCard(
-                        url = item.imageUrl,
-                        onDoubleClick = {
-                            userViewModel.addOrRemoveFav(item.id)
-                        },
-                        onClick = {
-                            userViewModel.changeScreen(Screen.DETAIL, item.id)
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
+        LazyColumn(
+            content = {
+                items(animalModelList) { item ->
+                    Column {
+                        FeedCard(
+                            url = item.imageUrl,
+                            onDoubleClick = {
+                                userViewModel.addOrRemoveFav(item.id)
+                            },
+                            onClick = {
+                                userViewModel.changeScreen(Screen.DETAIL, item.id)
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
 
-                    FeedActions(item.id, userViewModel)
+                        FeedActions(item.id, userViewModel)
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
                 }
             }
-        })
+        )
     }
 }
 
@@ -213,7 +229,8 @@ fun TabBarItem(text: String, isSelected: Boolean, onClick: (() -> Unit)? = null)
             style = MaterialTheme
                 .typography
                 .subtitle1
-                .copy(color = if (isSelected) {
+                .copy(
+                    color = if (isSelected) {
                         MaterialTheme.colors.surface
                     } else {
                         MaterialTheme.colors.onBackground
@@ -222,7 +239,6 @@ fun TabBarItem(text: String, isSelected: Boolean, onClick: (() -> Unit)? = null)
         )
     }
 }
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -269,30 +285,29 @@ fun FeedActions(id: Int, userViewModel: UserViewModel) {
             Icon(Icons.Filled.Share, contentDescription = "Share")
         }
         Spacer(modifier = Modifier.width(4.dp))
-
     }
 }
 
-//@Preview("Light Theme", widthDp = 360, heightDp = 640)
-//@Composable
-//fun LightPreview() {
+// @Preview("Light Theme", widthDp = 360, heightDp = 640)
+// @Composable
+// fun LightPreview() {
 //    MyTheme {
 //        MyApp()
 //    }
-//}
-
-//@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-//@Composable
-//fun DarkPreview() {
+// }
+//
+// @Preview("Dark Theme", widthDp = 360, heightDp = 640)
+// @Composable
+// fun DarkPreview() {
 //    MyTheme(darkTheme = true) {
 //        MyApp()
 //    }
-//}
-
-//@Preview("Feed Card", widthDp = 360, heightDp = 640)
-//@Composable
-//fun FeedCardPreview() {
+// }
+//
+// @Preview("Feed Card", widthDp = 360, heightDp = 640)
+// @Composable
+// fun FeedCardPreview() {
 //    MyTheme(darkTheme = true) {
 //        FeedCard(animalModelList[0].imageUrl)
 //    }
-//}
+// }
